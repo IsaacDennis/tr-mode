@@ -1,9 +1,16 @@
 ;;;###autoload
-(define-derived-mode tr-mode text-mode "TR" "Mode for Minetest .tr translation files")
+(define-derived-mode tr-mode text-mode "TR" "Mode for Minetest .tr translation files"
+  (setq-local font-lock-defaults '(tr-mode-highlights)))
 
 (defvar tr-mode-map (make-sparse-keymap)
   "Keymap for TR mode")
 
+(defvar tr-mode-highlights nil "")
+
+(setq tr-mode-highlights
+	  '(("^#\\(.*\\)$" . 'font-lock-comment-face)
+		(".*[^@]=" . 'font-lock-string-face)))
+ 
 (defun line-indentation-position ()
   (save-excursion (back-to-indentation) (point)))
 
