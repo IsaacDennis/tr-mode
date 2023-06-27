@@ -17,3 +17,12 @@
 		 (end (line-end-position))
 		 (content (buffer-substring-no-properties beg end)))
 	(and (not (equal (string-match-p "[^@]=" content) nil)) (not (comment-p)))))
+
+(defun translated-p ()
+  "Returns t if the current entry is translated. Otherwise, nil"
+  (let* ((beg (line-beginning-position))
+		 (end (line-end-position))
+		 (content (buffer-substring-no-properties beg end))
+		 (last-index (1- (length content))))
+	(and (entry-p) (not (= (1+ (string-match-p "[^@]=" content)) last-index)))))
+
