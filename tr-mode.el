@@ -26,3 +26,21 @@
 		 (last-index (1- (length content))))
 	(and (entry-p) (not (= (1+ (string-match-p "[^@]=" content)) last-index)))))
 
+(defun next-entry ()
+  (interactive)
+  (while (and (= (forward-line) 0) (not (entry-p))))
+  (when (entry-p)
+	(re-search-forward "[^@]=")))
+
+(defun previous-entry ()
+  (interactive)
+  (while (and (= (forward-line -1) 0) (not (entry-p))))
+  (when (entry-p)
+	(re-search-forward "[^@]=")))
+
+(defun next-untranslated-entry ()
+  (interactive)
+  (while (progn
+		   (next-entry)
+		   (translated-p))))
+
