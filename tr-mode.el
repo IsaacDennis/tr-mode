@@ -11,49 +11,22 @@
 	  '(("^#\\(.*\\)$" . 'font-lock-comment-face)
 		(".*[^@]=" . 'font-lock-string-face)))
 
-(defun get-current-line-content ()
-  "Return the characters of the current line."
-  (let ((beg (line-beginning-position))
-		(end (line-end-position)))
-	(buffer-substring-no-properties beg end)))
-
-(defun line-indentation-position ()
-  (save-excursion (back-to-indentation) (point)))
-
-(defun separator-match (content)
-  "Return index of start of separator match in CONTENT."
-  (string-match-p "[^@]=" content))
-
-(defun comment-p (content)
-  "Return t if CONTENT is a comment."
-  (equal (string-match-p "^#\\(.*\\)?" content) 0))
-
 (defun entry-p (content)
-  "Return non-nil (the index of start of separator match) if CONTENT is a entry."
-  (unless (comment-p content)
-	(separator-match content)))
+  "Return t if CONTENT is a entry."
+  (zerop (string-match-p "^\\([^#].*[^@]\\)=\\(.*\\)?$" content)))
 
-(defun translated-p (content)
-  (let ((last-index (1- (length content)))
-		(sep-index (entry-p content)))
-	(unless (equal sep-index nil)
-	  (not (= (1+ sep-index) last-index)))))
+(defun untranslated-p (content)
+  "Return t if CONTENT has an untranslated entry."
+  (integerp (string-match-p "^[^#\n].+[^@]=$" content)))
 
-;;;(defun next-entry ()
-;;;  (interactive)
-;;;  (while (and (= (forward-line) 0) (not (entry-p))))
-;;;  (when (entry-p)
-;;;	(re-search-forward "[^@]=")))
+(defun next-untranslated-entry ()
+  (interactive)
+  (when (equal (re-search-forward "^[^#\n].+[^@]=$" nil t) nil)
+	(message "No more untranslated entries.")))
 
-;;;(defun previous-entry ()
-;;;  (interactive)
-;;;  (while (and (= (forward-line -1) 0) (not (entry-p))))
-;;;  (when (entry-p)
-;;;	(re-search-forward "[^@]=")))
-
-;;;(defun next-untranslated-entry ()
-;;;  (interactive)
-;;;  (while (progn
-;;;		   (next-entry)
-;;;		   (translated-p))))
-
+(defun previous-untranslated-entry ()
+  (interactive)
+  (beginning-of-line)
+  (if (equal (re-search-backward "^[^#\n].+[^@]=$" nil t) nil)
+	  (message "No more untranslated entries.")
+	(end-of-line)))
