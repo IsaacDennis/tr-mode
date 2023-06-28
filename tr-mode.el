@@ -26,7 +26,10 @@
 
 (defun previous-untranslated-entry ()
   (interactive)
-  (beginning-of-line)
-  (if (equal (re-search-backward "^[^#\n].+[^@]=$" nil t) nil)
-	  (message "No more untranslated entries.")
-	(end-of-line)))
+  (let ((beginning-point (point)))
+	(beginning-of-line)
+	(if (equal (re-search-backward "^[^#\n].+[^@]=$" nil t) nil)
+		(progn (message "No more untranslated entries.")
+			   (goto-char beginning-point))
+	  (end-of-line))))
+  
