@@ -45,3 +45,7 @@
 			   (goto-char beginning-point))
 	  (end-of-line))))
   
+(define-key tr-mode-map (kbd "C-c C-n") #'next-untranslated-entry)
+(define-key tr-mode-map (kbd "C-c C-p") #'previous-untranslated-entry)
+(define-key tr-mode-map (kbd "C-c C-u") #'check-buffer-untranslated)
+
