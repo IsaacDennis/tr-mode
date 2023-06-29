@@ -19,6 +19,18 @@
   "Return t if CONTENT has an untranslated entry."
   (integerp (string-match-p "^[^#\n].+[^@]=$" content)))
 
+(defun buffer-untranslated-p ()
+  "Return t if current buffer has an untranslated entry."
+  (let ((content (buffer-substring-no-properties (point-min) (point-max))))
+	(untranslated-p content)))
+
+(defun check-buffer-untranslated ()
+  "Display message if current buffer has an untranslated entry."
+  (interactive)
+  (if (buffer-untranslated-p)
+	  (message "Current buffer contains untranslated entries.")
+	(message "No more untranslated entries in current buffer.")))
+
 (defun next-untranslated-entry ()
   (interactive)
   (when (equal (re-search-forward "^[^#\n].+[^@]=$" nil t) nil)
