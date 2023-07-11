@@ -1,9 +1,13 @@
+(defvar tr-mode-map (let ((map (make-sparse-keymap)))
+					  (define-key map (kbd "C-c C-n") #'next-untranslated-entry)
+					  (define-key map (kbd "C-c C-p") #'previous-untranslated-entry)
+					  (define-key map (kbd "C-c C-u") #'check-buffer-untranslated)
+					  map)
+  "Keymap for TR mode.")
+
 ;;;###autoload
 (define-derived-mode tr-mode text-mode "TR" "Mode for Minetest .tr translation files."
   (setq-local font-lock-defaults '(tr-mode-highlights)))
-
-(defvar tr-mode-map (make-sparse-keymap)
-  "Keymap for TR mode.")
 
 (defvar tr-mode-highlights nil "'tr-mode' font-lock faces.")
 
@@ -44,8 +48,3 @@
 		(progn (message "No more untranslated entries.")
 			   (goto-char beginning-point))
 	  (end-of-line))))
-  
-(define-key tr-mode-map (kbd "C-c C-n") #'next-untranslated-entry)
-(define-key tr-mode-map (kbd "C-c C-p") #'previous-untranslated-entry)
-(define-key tr-mode-map (kbd "C-c C-u") #'check-buffer-untranslated)
-
