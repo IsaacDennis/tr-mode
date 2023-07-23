@@ -76,3 +76,6 @@
 		(progn (message "No more untranslated entries.")
 			   (goto-char beginning-point))
 	  (end-of-line))))
+
+(provide 'tr-mode)
+;;; tr-mode.el ends here
